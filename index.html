@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Swiss Clock</title>
+		<style>
+			html, body {
+				margin: 0; padding: 0;
+			}
+			body {
+				font-family: "Helvetica-Neue", sans-serif;		
+				background-color: #555;
+			}
+			h1 {
+				margin: 0.5em 0;
+				line-height: 1.25;
+				font-size: 2rem;
+				font-weight: 800;
+				letter-spacing: -1pt;
+				color: #EEE;
+				text-shadow: 0 3px 5px #1117;
+			}
+			.frame {
+				padding: 1rem;
+			}
+			svg#swissClock {
+				width: 100%;
+				height: auto;
+
+				/* Calculate viewport height - (H1 + frame padding) */
+				max-height: calc(100vh - 8rem);
+			}
+			
+			#swissClock {
+				--hourHandAngle: 45deg;
+				--minuteHandAngle: 120deg;
+				--secondHandAngle: 200deg;
+			}
+			#hourHand {
+				transform: rotate(var(--hourHandAngle));
+				transform-origin: center;
+			}
+			#minuteHand {
+				transform: rotate(var(--minuteHandAngle));
+				transform-origin: center;
+			}
+			#secondHand {
+				transform: rotate(var(--secondHandAngle));
+				transform-origin: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="frame">
+			<h1>Zürich</h1>
+			<svg
+				id="swissClock"
+				xmlns="http://www.w3.org/2000/svg"
+				xmlns:xlink="http://www.w3.org/1999/xlink"
+				viewBox="0 0 1024 1024"
+			>
+				<symbol id="hourMark">
+					<rect 
+						x="496"
+						y="80"
+						width="32"
+						height="108"
+					/>
+				</symbol>
+				<symbol id="minuteMark">
+					<rect 
+						x="506"
+						y="80"
+						width="12"
+						height="32"
+					/>
+				</symbol>
+				<filter id="dropShadow">
+					<feDropShadow 
+						dx="0" dy="6"
+						stdDeviation="8"
+						flood-opacity="0.2" />
+				</filter>
+
+				<g id="clockFace" stroke="none">
+					<circle
+						fill="#E3E3E3"
+						r="510"
+						cx="512"
+						cy="512"
+					/>
+					<circle
+						fill="#EEE"
+						r="472"
+						cx="512"
+						cy="512"
+						filter="url(#dropShadow)"
+					/>
+					<g id="marks" fill="#262626">
+						<g id="minuteMarks">
+							<use href="#minuteMark" x="0" y="0" transform="rotate(0 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(6 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(12 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(18 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(24 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(30 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(36 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(42 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(48 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(54 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(60 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(66 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(72 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(78 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(84 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(90 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(96 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(102 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(108 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(114 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(120 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(126 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(132 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(138 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(144 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(150 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(156 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(162 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(168 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(174 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(180 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(186 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(192 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(198 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(204 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(210 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(216 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(222 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(228 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(234 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(240 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(246 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(252 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(258 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(264 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(270 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(276 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(282 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(288 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(294 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(300 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(306 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(312 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(318 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(324 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(330 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(336 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(342 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(348 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(354 512 512)" />
+							<use href="#minuteMark" x="0" y="0" transform="rotate(360 512 512)" />
+						</g>
+						<g id="hourMarks">
+							<use href="#hourMark" x="0" y="0" transform="rotate(0 512 512)" />
+							<use href="#hourMark" x="0" y="0" transform="rotate(30 512 512)" />
+							<use href="#hourMark" x="0" y="0" transform="rotate(60 512 512)" />
+							<use href="#hourMark" x="0" y="0" transform="rotate(90 512 512)" />
+							<use href="#hourMark" x="0" y="0" transform="rotate(120 512 512)" />
+							<use href="#hourMark" x="0" y="0" transform="rotate(150 512 512)" />
+							<use href="#hourMark" x="0" y="0" transform="rotate(180 512 512)" />
+							<use href="#hourMark" x="0" y="0" transform="rotate(210 512 512)" />
+							<use href="#hourMark" x="0" y="0" transform="rotate(240 512 512)" />
+							<use href="#hourMark" x="0" y="0" transform="rotate(270 512 512)" />
+							<use href="#hourMark" x="0" y="0" transform="rotate(300 512 512)" />
+							<use href="#hourMark" x="0" y="0" transform="rotate(330 512 512)" />
+						</g>
+					</g>
+
+					<g id="hands" fill="#222">
+						<g 
+							id="hourHand"
+							transform="rotate(0 512 512)">	
+							<polygon points="489,226	535,226 541,620	483,620" />
+						</g>
+						<g 
+							id="minuteHand"
+							transform="rotate(0 512 512)">
+							<polygon points="496,106 528,106 535,620 489,620" />
+						</g>
+						<g id="secondHand">
+							<g 
+								transform="rotate(0 512 512)"
+								fill="#A00">
+								<polygon points="505.5,200 518.5,200 518.5,660 505.5,660" />
+								<circle
+									r="45"
+									cx="512"
+									cy="230"
+								/>
+							</g>
+						</g>
+					</g>
+					<circle
+						id="centre"
+						fill="#EEE7"
+						r="1"
+						cx="512"
+						cy="512"
+					/>	
+				</g>
+			</svg>
+		</div>
+		<script>
+			const swissClock = document.getElementById('swissClock');
+
+			swissClock.style.setProperty('--hourHandAngle', '150deg');
+			swissClock.style.setProperty('--minuteHandAngle', '150deg');
+			swissClock.style.setProperty('--secondHandAngle', '150deg');
+
+			setInterval(update, 100);
+
+			function update () {
+				// TODO timezones etc.
+				// TODO toggle seconds hand?
+
+				const now = new Date();
+				const hour = now.getHours();
+				const minute = now.getMinutes();
+				const second = now.getSeconds();
+
+				// Calculate positions;
+				const hourHandAngle = ((hour * 30) + (minute * 0.5)) + 'deg';
+				const minuteHandAngle = ((minute * 6) + (second * 0.1)) + 'deg';
+				const secondHandAngle = (second * 6) + 'deg';
+
+				swissClock.style.setProperty('--hourHandAngle', hourHandAngle);
+				swissClock.style.setProperty('--minuteHandAngle', minuteHandAngle);
+				swissClock.style.setProperty('--secondHandAngle', secondHandAngle);			
+			}
+		</script>
+	</body>
+</html>
