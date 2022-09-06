@@ -252,6 +252,7 @@
 			const ianaTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 			let currentLocale = ianaTimeZone.split('/')[0];
 			let currentTimeZone = ianaTimeZone;
+			let minuteHandIncrement = 'seconds';
 
 			updateLocaleOptions();
 			updateLocationOptions();
@@ -268,7 +269,9 @@
 
 				// Calculate positions;
 				const hourHandAngle = ((hour * 30) + (minute * 0.5)) + 'deg';
-				const minuteHandAngle = ((minute * 6) + (second * 0.1)) + 'deg';
+				const minuteHandAngle = (minuteHandIncrement === 'seconds')		
+					? ((minute * 6) + (second * 0.1)) + 'deg'
+					: (minute * 6) + 'deg';
 				const secondHandAngle = (second * 6) + 'deg';
 
 				swissClock.style.setProperty('--hourHandAngle', hourHandAngle);
