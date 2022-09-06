@@ -10,7 +10,7 @@
 				margin: 0; padding: 0;
 			}
 			body {
-				font-family: "Helvetica-Neue", sans-serif;		
+				font-family: "Helvetica-Neue", sans-serif;
 				background-color: #555;
 				color: #fff;
 			}
@@ -23,6 +23,20 @@
 				color: #EEE;
 				text-shadow: 0 3px 5px #1117;
 			}
+			fieldset {
+				margin: 0;
+				padding: 0;
+				border: none;
+			}
+			legend {
+				position: relative;
+				display: inline-block;
+				margin-right: 2em;
+				padding-inline-start: 0;
+			}
+			select {
+				margin-right: 2em;
+			}
 			.frame {
 				padding: 1rem;
 			}
@@ -33,7 +47,7 @@
 				/* Calculate viewport height - (H1 + frame padding) */
 				max-height: calc(100vh - 8rem);
 			}
-			
+
 			#swissClock {
 				--hourHandAngle: 45deg;
 				--minuteHandAngle: 120deg;
@@ -56,6 +70,14 @@
 	<body>
 		<div class="frame">
 			<h1>Zürich</h1>
+			<form name="timezone-form">
+				<fieldset>
+					<label for="locale-select">Locale</label>
+					<select name="locale" id="locale-select"></select>
+					<label for="timezone-select">Location</label>
+					<select name="timezone" id="timezone-select"></select>
+				</fieldset>
+			</form>
 			<svg
 				id="swissClock"
 				xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +85,7 @@
 				viewBox="0 0 1024 1024"
 			>
 				<symbol id="hourMark">
-					<rect 
+					<rect
 						x="496"
 						y="80"
 						width="32"
@@ -71,7 +93,7 @@
 					/>
 				</symbol>
 				<symbol id="minuteMark">
-					<rect 
+					<rect
 						x="506"
 						y="80"
 						width="12"
@@ -79,7 +101,7 @@
 					/>
 				</symbol>
 				<filter id="dropShadow">
-					<feDropShadow 
+					<feDropShadow
 						dx="0" dy="6"
 						stdDeviation="8"
 						flood-opacity="0.2" />
@@ -180,18 +202,18 @@
 					</g>
 
 					<g id="hands" fill="#222">
-						<g 
+						<g
 							id="hourHand"
-							transform="rotate(0 512 512)">	
+							transform="rotate(0 512 512)">
 							<polygon points="489,226	535,226 541,620	483,620" />
 						</g>
-						<g 
+						<g
 							id="minuteHand"
 							transform="rotate(0 512 512)">
 							<polygon points="496,106 528,106 535,620 489,620" />
 						</g>
 						<g id="secondHand">
-							<g 
+							<g
 								transform="rotate(0 512 512)"
 								fill="#A00">
 								<polygon points="505.5,200 518.5,200 518.5,660 505.5,660" />
@@ -209,7 +231,7 @@
 						r="1"
 						cx="512"
 						cy="512"
-					/>	
+					/>
 				</g>
 			</svg>
 		</div>
@@ -219,18 +241,27 @@
 			// 24 hour clock AM / PM
 
 			const swissClock = document.getElementById('swissClock');
+			const localeSelect = document.getElementById('locale-select');
+			const timeZoneSelect = document.getElementById('timezone-select');
 
 			swissClock.style.setProperty('--hourHandAngle', '150deg');
 			swissClock.style.setProperty('--minuteHandAngle', '150deg');
 			swissClock.style.setProperty('--secondHandAngle', '150deg');
 
-			setInterval(update, 100);
+			const supportedLocales = getSupportedLocales();
+			const ianaTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			let currentLocale = ianaTimeZone.split('/')[0];
+			let currentTimeZone = ianaTimeZone;
 
-			function update () {
-				// TODO timezones etc.
-				// TODO toggle seconds hand?
+			updateLocaleOptions();
+			updateLocationOptions();
+			setInterval(updateClock, 100);
 
-				const now = new Date();
+			localeSelect.addEventListener('change', handleLocaleSelect);
+			timeZoneSelect.addEventListener('change', (event) => currentTimeZone = event.target.value);
+
+			function updateClock () {
+				const now = new Date(new Date().toLocaleString([], { timeZone: currentTimeZone }));
 				const hour = now.getHours();
 				const minute = now.getMinutes();
 				const second = now.getSeconds();
@@ -242,7 +273,68 @@
 
 				swissClock.style.setProperty('--hourHandAngle', hourHandAngle);
 				swissClock.style.setProperty('--minuteHandAngle', minuteHandAngle);
-				swissClock.style.setProperty('--secondHandAngle', secondHandAngle);			
+				swissClock.style.setProperty('--secondHandAngle', secondHandAngle);
+			}
+
+			function getSupportedLocales () {
+				const supportedTimeZones = Intl.supportedValuesOf('timeZone');
+				const supportedLocales = supportedTimeZones.reduce(
+					(previousValue, timeZone) => {
+						const split = timeZone.split('/');
+						const locale = split.shift();
+						const location = {
+							timeZone,
+							location: split.join(', ').replaceAll('_', ' ')
+						};
+						const locations = (previousValue[locale])
+							? [...previousValue[locale], location]
+							: [location];
+
+						return {
+							...previousValue,
+							[locale]: locations
+						}
+					},
+					{}
+				);
+
+				return supportedLocales;
+			}
+
+			function handleLocaleSelect (event) {
+				currentLocale = event.target.value;
+				currentTimeZone = supportedLocales[currentLocale][0].timeZone;
+
+				updateLocationOptions();
+			}
+
+			function updateLocaleOptions () {
+				const localeOptions = Object
+					.keys(supportedLocales)
+					.sort()
+					.map(locale => new Option(
+						locale,
+						locale,
+						Boolean(locale === currentLocale),
+						Boolean(locale === currentLocale)
+					));
+
+				localeOptions.forEach(localeOption => localeSelect.appendChild(localeOption));
+			}
+
+			function updateLocationOptions () {
+				const timeZones = supportedLocales[currentLocale];
+				const timeZoneOptions = timeZones.map(
+					({ location, timeZone }) => new Option(
+						location,
+						timeZone,
+						Boolean(timeZone === currentTimeZone),
+						Boolean(timeZone === currentTimeZone)
+					)
+				);
+
+				timeZoneSelect.innerHTML = '';
+				timeZoneOptions.forEach(timeZoneOption => timeZoneSelect.appendChild(timeZoneOption));
 			}
 		</script>
 	</body>
