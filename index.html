@@ -44,8 +44,8 @@
 				width: 100%;
 				height: auto;
 
-				/* Calculate viewport height - (H1 + frame padding) */
-				max-height: calc(100vh - 8rem);
+				/* Calculate viewport height - (H1 + frame padding + form) */
+				max-height: calc(100vh - 10rem);
 			}
 
 			#swissClock {
@@ -233,16 +233,23 @@
 					<label for="timezone-select">Location</label>
 					<select name="timezone" id="timezone-select"></select>
 				</fieldset>
+				<fieldset>
+					<label for="minute-hand-increment-select">Minute Hand Increment</label>
+					<select name="minute-hand" id="minute-hand-increment-select">
+						<option value="seconds">seconds</option>
+						<option value="minutes">minutes</option>
+					</select>
+				</fieldset>
 			</form>
 		</div>
 		<script>
 			// TODO toggle seconds hand
-			// TODO toggle minute increments
 			// 24 hour clock AM / PM
 
 			const swissClock = document.getElementById('swissClock');
 			const localeSelect = document.getElementById('locale-select');
 			const timeZoneSelect = document.getElementById('timezone-select');
+			const minuteHandIncrementSelect = document.getElementById('minute-hand-increment-select');
 
 			swissClock.style.setProperty('--hourHandAngle', '150deg');
 			swissClock.style.setProperty('--minuteHandAngle', '150deg');
@@ -260,6 +267,7 @@
 
 			localeSelect.addEventListener('change', handleLocaleSelect);
 			timeZoneSelect.addEventListener('change', (event) => currentTimeZone = event.target.value);
+			minuteHandIncrementSelect.addEventListener('change', handleMinuteHandIncrementSelect);
 
 			function updateClock () {
 				const now = new Date(new Date().toLocaleString([], { timeZone: currentTimeZone }));
@@ -302,6 +310,10 @@
 				);
 
 				return supportedLocales;
+			}
+
+			function handleMinuteHandIncrementSelect (event) {
+				minuteHandIncrement = event.target.value;
 			}
 
 			function handleLocaleSelect (event) {
