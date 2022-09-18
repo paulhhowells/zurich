@@ -257,23 +257,28 @@
 
 			const supportedLocales = getSupportedLocales();
 			const ianaTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 			let currentLocale = ianaTimeZone.split('/')[0];
 			let currentTimeZone = ianaTimeZone;
 			let minuteHandIncrement = 'seconds';
+			let hourIntl;
+			let minuteIntl;
+			let secondIntl;
 
-			updateLocaleOptions();
+			updateLocaleSelectOptions();
 			updateLocationOptions();
+			updateIntlOptions();
 			setInterval(updateClock, 100);
 
 			localeSelect.addEventListener('change', handleLocaleSelect);
-			timeZoneSelect.addEventListener('change', (event) => currentTimeZone = event.target.value);
+			timeZoneSelect.addEventListener('change', handleTimeZoneSelect);
 			minuteHandIncrementSelect.addEventListener('change', handleMinuteHandIncrementSelect);
 
 			function updateClock () {
-				const now = new Date(new Date().toLocaleString([], { timeZone: currentTimeZone }));
-				const hour = now.getHours();
-				const minute = now.getMinutes();
-				const second = now.getSeconds();
+				const now = new Date();
+				const hour = hourIntl.format(now);
+				const minute = minuteIntl.format(now);
+				const second = secondIntl.format(now);
 
 				// Calculate positions;
 				const hourHandAngle = ((hour * 30) + (minute * 0.5)) + 'deg';
@@ -285,6 +290,18 @@
 				swissClock.style.setProperty('--hourHandAngle', hourHandAngle);
 				swissClock.style.setProperty('--minuteHandAngle', minuteHandAngle);
 				swissClock.style.setProperty('--secondHandAngle', secondHandAngle);
+			}
+
+			function updateIntlOptions () {
+				hourIntl = new Intl.DateTimeFormat([], { hour: 'numeric', timeZone: currentTimeZone	});
+				minuteIntl = new Intl.DateTimeFormat([], { minute: 'numeric', timeZone: currentTimeZone	});
+				secondIntl = new Intl.DateTimeFormat([], { second: 'numeric', timeZone: currentTimeZone });
+			}
+
+			function handleTimeZoneSelect (event) {
+				currentTimeZone = event.target.value;
+
+				updateIntlOptions();
 			}
 
 			function getSupportedLocales () {
@@ -320,10 +337,11 @@
 				currentLocale = event.target.value;
 				currentTimeZone = supportedLocales[currentLocale][0].timeZone;
 
+				updateIntlOptions();
 				updateLocationOptions();
 			}
 
-			function updateLocaleOptions () {
+			function updateLocaleSelectOptions () {
 				const localeOptions = Object
 					.keys(supportedLocales)
 					.sort()
