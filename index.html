@@ -240,6 +240,14 @@
 						<option value="minutes">minutes</option>
 					</select>
 				</fieldset>
+				<fieldset>
+					<label>
+						<input type="radio" name="aesthetic" value="helvetica" id="helvetica" /> Helvetica
+					</label>
+					<label>
+						<input type="radio" name="aesthetic" value="avenir" id="avenir" /> Avenir
+					</label>
+				</fieldset>
 			</form>
 		</div>
 		<script>
@@ -249,10 +257,44 @@
 			// TODO theme
 			// TODO style form
 
+			const AESTHETIC = {
+				helvetica : {
+					hourHand : '<polygon points="489,226 535,226 541,620 483,620" />',
+					minuteHand : '<polygon points="496,106 528,106 535,620 489,620" />',
+					secondHand : `<g
+						transform="rotate(0 512 512)"
+						fill="#A00">
+						<polygon points="505.5,200 518.5,200 518.5,660 505.5,660" />
+						<circle
+							r="45"
+							cx="512"
+							cy="230"
+						/>
+					</g>`,
+					hourMark : '<rect	x="496"	y="80" width="32"	height="108" />',
+					minuteMark : '<rect	x="506"	y="80" width="12"	height="32"	/>',
+				},
+				avenir : {
+					hourHand : '<polygon points="489,226 535,226 535,620 489,620" />',
+					minuteHand : '<polygon points="496,140 528,140 528,600 496,600" />',
+					secondHand : `<g
+						transform="rotate(0 512 512)"
+						fill="#A00">
+						<polygon points="
+							508,170 516,170 
+							516,640 508,640" />
+					</g>`,
+					hourMark : '<rect	x="505"	y="79" width="14"	height="80"	/>',
+					minuteMark : '<rect	x="510"	y="80" width="4" height="32" />',
+				}
+			};
+
 			const swissClock = document.getElementById('swissClock');
 			const localeSelect = document.getElementById('locale-select');
 			const timeZoneSelect = document.getElementById('timezone-select');
 			const minuteHandIncrementSelect = document.getElementById('minute-hand-increment-select');
+			const helveticaRadio = document.getElementById('helvetica');
+			const avenirRadio = document.getElementById('avenir');
 
 			swissClock.style.setProperty('--hourHandAngle', '150deg');
 			swissClock.style.setProperty('--minuteHandAngle', '150deg');
@@ -276,6 +318,8 @@
 			localeSelect.addEventListener('change', handleLocaleSelect);
 			timeZoneSelect.addEventListener('change', handleTimeZoneSelect);
 			minuteHandIncrementSelect.addEventListener('change', handleMinuteHandIncrementSelect);
+			helveticaRadio.addEventListener('change', handleAestheticRadioChange);
+			avenirRadio.addEventListener('change', handleAestheticRadioChange);
 
 			function updateClock () {
 				const now = new Date();
@@ -371,6 +415,14 @@
 
 				timeZoneSelect.innerHTML = '';
 				timeZoneOptions.forEach(timeZoneOption => timeZoneSelect.appendChild(timeZoneOption));
+			}
+			
+			function handleAestheticRadioChange (event) {
+				const aesthetic = AESTHETIC[event.target.value];
+
+				for (const element in aesthetic) {
+					document.getElementById(element).innerHTML = aesthetic[element];
+				}	
 			}
 		</script>
 	</body>
